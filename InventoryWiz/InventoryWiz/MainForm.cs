@@ -28,22 +28,34 @@ namespace InventoryWiz
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
+			
 			InitializeComponent();
 			
-			InventoryDao.PopulateSets(dgSets);
-			
-			ResizeSetsGrid();
-			
-			InventoryDao.PopulateInventory(dgInventory);
-			
-			ResizeInventoryGrid();
-			
-			if (dgSets.Rows.Count > 0) {
-				dgSets.Rows[0].Selected = true;
-				InventoryDao.PopulateItemsForSet(dgItems, dgSets.SelectedRows[0].Cells[0].Value.ToString());
-				ResizeItemsGrid();
-			}
+			RefreshAllGrids();
 		}
+		
+		
+		void RefreshAllGrids()
+		{
+			try {
+				InventoryDao.PopulateSets(dgSets);
+			
+				ResizeSetsGrid();
+			
+				InventoryDao.PopulateInventory(dgInventory);
+			
+				ResizeInventoryGrid();
+			
+				if (dgSets.Rows.Count > 0) {
+					dgSets.Rows[0].Selected = true;
+					InventoryDao.PopulateItemsForSet(dgItems, dgSets.SelectedRows[0].Cells[0].Value.ToString());
+					ResizeItemsGrid();
+				}
+			}
+			catch (Exception e) {}
+			
+		}
+		
 		void CreateDbButtonClick(object sender, EventArgs e)
 		{
 			InventoryDao.CreateDB();
@@ -59,14 +71,17 @@ namespace InventoryWiz
 			
 			MessageBox.Show("Done!");
 			
-			InventoryDao.PopulateSets(dgSets);
+			RefreshAllGrids();
 			
 			this.Cursor = System.Windows.Forms.Cursors.Default;
 		}
+		
 		void MainFormLoad(object sender, EventArgs e)
 		{
 	
 		}
+		
+		
 		void AddNewSetButtonClick(object sender, EventArgs e)
 		{
 			new NewSetDialog().ShowDialog(this);
@@ -149,10 +164,26 @@ namespace InventoryWiz
 			
 			InventoryDao.GenerateInventory(true);
 			
-			MessageBox.Show ("Finished! Please find your full inventory at " +
+			MessageBox.Show ("Finished! Please find your full inventory at " + Application.StartupPath + "\\" +
 			                 System.Configuration.ConfigurationSettings.AppSettings["outputFile"]);
 			
+			RefreshAllGrids();
+			
 			this.Cursor = System.Windows.Forms.Cursors.Default;
+		}
+		
+		void CreateDBButtonClick(object sender, EventArgs e)
+		{
+			if (MessageBox.Show(
+				"This action will erase ALL existing database records and start everything from scratch! " +
+				"Please think carefully and confirm your decision or click Cancel if you are not sure", 
+				"WARNING!!!", MessageBoxButtons.OKCancel) == DialogResult.OK)
+			{
+				this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+				InventoryDao.CreateDB();
+				RefreshAllGrids();
+				this.Cursor = System.Windows.Forms.Cursors.Default;
+			}
 		}
 	
 	}

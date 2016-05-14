@@ -7,3 +7,12 @@ C:\Users\arkady\Documents\SharpDevelop Projects\InventoryWiz\InventoryWiz\obj\De
 C:\Users\arkady\Documents\SharpDevelop Projects\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.exe
 C:\Users\arkady\Documents\SharpDevelop Projects\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.pdb
 C:\Users\arkady\Documents\SharpDevelop Projects\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.NewSetDialog.resources
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\bin\Debug\InventoryWiz.exe.config
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\bin\Debug\InventoryWiz.exe
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\bin\Debug\InventoryWiz.pdb
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.csprojResolveAssemblyReference.cache
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.MainForm.resources
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.NewSetDialog.resources
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.csproj.GenerateResource.Cache
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.exe
+C:\projects\InventoryWiz\InventoryWiz\InventoryWiz\obj\Debug\InventoryWiz.pdb

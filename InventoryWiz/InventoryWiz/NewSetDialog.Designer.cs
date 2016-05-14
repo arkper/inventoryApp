@@ -136,7 +136,8 @@ namespace InventoryWiz
 			this.Controls.Add(this.newSetSaveButton);
 			this.Controls.Add(this.NewSetPanel);
 			this.Name = "NewSetDialog";
-			this.Text = "NewSetDialog";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "New Funiture Set Setup";
 			this.NewSetPanel.ResumeLayout(false);
 			this.NewSetPanel.PerformLayout();
 			this.ResumeLayout(false);

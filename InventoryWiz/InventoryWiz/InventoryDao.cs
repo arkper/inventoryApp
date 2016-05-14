@@ -27,7 +27,7 @@ namespace InventoryWiz
 		
 		public static SqlCeConnection getConnection(){
 
-			if (conn == null)
+			if (conn == null || conn.State.ToString() != "Open")
 			{
 	        	SqlCeEngine engine = new SqlCeEngine(connString);
 	        	conn = new SqlCeConnection(connString);
@@ -166,7 +166,9 @@ namespace InventoryWiz
 			// First Update set onhand quantities
 			using (SqlCeCommand comm = InventoryDao.getConnection().CreateCommand())
 			{
-				comm.CommandText="select fs.id, min(i.ONHAND) from FURNITURE_SET fs join set_item si on si.set_id=fs.id join INVENTORY i on si.item_id=i.id group by fs.id";
+				comm.CommandText="select fs.id, min(i.ONHAND), min(i.ON_ORDER), min(i.SALES_BOS), min(i.AVAILABLE) " +
+					"from FURNITURE_SET fs join set_item si on si.set_id=fs.id join INVENTORY i on si.item_id=i.id " +
+					"group by fs.id";
 				
 				SqlCeDataReader reader=comm.ExecuteReader();
 				
@@ -174,13 +176,21 @@ namespace InventoryWiz
 				{
 					string id = reader.GetString(0);
 					int onHand = reader.GetInt32(1);
+					int onOrder = reader.GetInt32(2);
+					int salesBos = reader.GetInt32(3);
+					int available = reader.GetInt32(4);
 					
 					comm.CommandText = 
-						"update FURNITURE_SET set ONHAND=@onHand where id=@id";
+						"update FURNITURE_SET set ONHAND=@onHand, ON_ORDER=@onOrder, SALES_BOS=@salesBos, AVAILABLE=@available " +
+						"where id=@id";
 					
 					comm.Parameters.Clear();
 					comm.Parameters.AddWithValue("id", id);
 					comm.Parameters.AddWithValue("onHand", onHand);
+					comm.Parameters.AddWithValue("onOrder", onOrder);
+					comm.Parameters.AddWithValue("salesBos", salesBos);
+					comm.Parameters.AddWithValue("available", available);
+					
 					
 					comm.ExecuteNonQuery();
 
@@ -211,20 +221,29 @@ namespace InventoryWiz
 			 
 				using (OleDbCommand excelCmd =	excelConnection.CreateCommand())
 				{
-					comm.CommandText="select id, description, onhand from INVENTORY union all select id, description, onhand from FURNITURE_SET";
+					comm.CommandText="select id, description, onhand, on_order, sales_bos, available from INVENTORY " +
+						"union all select id, description, onhand, on_order, sales_bos, available from FURNITURE_SET";
 					reader = comm.ExecuteReader();
 					while (reader.Read())
 					{
 						string id = reader.GetString(0);
 						string desciption = reader.GetString(1);
 						int onHand = reader.GetInt32(2);
+						int onOrder = reader.GetInt32(3);
+						int salesBos = reader.GetInt32(4);
+						int available = reader.GetInt32(5);
 					
-						excelCmd.CommandText = "insert into [" + tabName + "]([Item ID], [Desc for Sales], [Qty on Hand]) values (@id, @desc, @onhand)";
+						excelCmd.CommandText = "insert into [" + tabName + 
+							"]([Item ID], [Desc for Sales], [Qty on Hand], [Qty on Order], [Sales BOs], [Qty Available]) " +
+							"values (@id, @desc, @onhand, @onorder, @salesBos, @available)";
 					
 						excelCmd.Parameters.Clear();
 						excelCmd.Parameters.AddWithValue("id", id);
 						excelCmd.Parameters.AddWithValue("desc", desciption);
 						excelCmd.Parameters.AddWithValue("onhand", onHand);
+						excelCmd.Parameters.AddWithValue("onorder", onOrder);
+						excelCmd.Parameters.AddWithValue("salesBos", salesBos);
+						excelCmd.Parameters.AddWithValue("available", available);
 					
 						excelCmd.ExecuteNonQuery();
 					}
@@ -242,6 +261,9 @@ namespace InventoryWiz
 		
 		public static void CreateDB()
     	{
+			getConnection().Close();
+			
+			
 			if (File.Exists("InventoryDb.sdf"))
     			File.Delete("InventoryDb.sdf");
         	
@@ -252,11 +274,11 @@ namespace InventoryWiz
         	using (SqlCeCommand comm = getConnection().CreateCommand())
        		{
        			comm.CommandText =    			
-       				"CREATE TABLE INVENTORY (ID nvarchar(256) not null primary key, DESCRIPTION nvarchar(1000), ONHAND INTEGER)";
+       				"CREATE TABLE INVENTORY (ID nvarchar(256) not null primary key, DESCRIPTION nvarchar(1000), ONHAND INTEGER, ON_ORDER INTEGER, SALES_BOS INTEGER, AVAILABLE INTEGER)";
         		
        			comm.ExecuteNonQuery();
        			comm.CommandText =    			
-       				"CREATE TABLE FURNITURE_SET (ID nvarchar(256) not null primary key, DESCRIPTION nvarchar(1000), ONHAND INTEGER)";
+       				"CREATE TABLE FURNITURE_SET (ID nvarchar(256) not null primary key, DESCRIPTION nvarchar(1000), ONHAND INTEGER, ON_ORDER INTEGER, SALES_BOS INTEGER, AVAILABLE INTEGER)";
        			comm.ExecuteNonQuery();
         		comm.CommandText =    			
         			"CREATE TABLE SET_ITEM (SET_ID nvarchar(256) not null, ITEM_ID nvarchar(256) not null)";
@@ -303,20 +325,26 @@ namespace InventoryWiz
 			using (SqlCeCommand comm = getConnection().CreateCommand())
        		{
         			comm.CommandText =    			
-        				"insert into INVENTORY (ID, DESCRIPTION, ONHAND) values (@id, @desc, @quantity)";
+        				"insert into INVENTORY (ID, DESCRIPTION, ONHAND, ON_ORDER, SALES_BOS, AVAILABLE) values (@id, @desc, @onhand, @onorder, @salesbos, @available)";
 
 
 	        		while (reader.Read())
 					{
 						string id = reader.GetString(0);
 						string description = reader.GetString(1);
-						double quantity = reader.GetDouble(2);
+						double onHand = reader.GetDouble(2);
+						double onOrder = reader.GetDouble(3);
+						double salesBos = reader.GetDouble(4);
+						double available = reader.GetDouble(5);
 					
 						comm.Parameters.Clear();
 					
 						comm.Parameters.Add("id", id);
 						comm.Parameters.Add("desc", description);
-						comm.Parameters.Add("quantity", quantity);
+						comm.Parameters.Add("onhand", onHand);
+						comm.Parameters.Add("onorder", onOrder);
+						comm.Parameters.Add("salesbos", salesBos);
+						comm.Parameters.Add("available", available);
 						
 						comm.ExecuteNonQuery();
 					}

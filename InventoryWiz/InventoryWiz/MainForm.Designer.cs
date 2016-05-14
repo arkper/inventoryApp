@@ -29,6 +29,7 @@ namespace InventoryWiz
 		private System.Windows.Forms.DataGridView dgInventory;
 		private System.Windows.Forms.Button deleteSetButton;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Button createDBButton;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -63,6 +64,7 @@ namespace InventoryWiz
 			this.dgInventory = new System.Windows.Forms.DataGridView();
 			this.deleteSetButton = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
+			this.createDBButton = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.dgSets)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dgInventory)).BeginInit();
@@ -190,11 +192,22 @@ namespace InventoryWiz
 			this.label3.TabIndex = 15;
 			this.label3.Text = "Set Item Collection";
 			// 
+			// createDBButton
+			// 
+			this.createDBButton.Location = new System.Drawing.Point(504, 707);
+			this.createDBButton.Name = "createDBButton";
+			this.createDBButton.Size = new System.Drawing.Size(149, 35);
+			this.createDBButton.TabIndex = 16;
+			this.createDBButton.Text = "Create Database";
+			this.createDBButton.UseVisualStyleBackColor = true;
+			this.createDBButton.Click += new System.EventHandler(this.CreateDBButtonClick);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1914, 754);
+			this.Controls.Add(this.createDBButton);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.deleteSetButton);
 			this.Controls.Add(this.dgInventory);
