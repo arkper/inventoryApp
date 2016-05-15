@@ -146,17 +146,24 @@ namespace InventoryWiz
 			dgSets.Columns[0].Width= (int) Math.Floor (dgSets.Width * .2);
 			dgSets.Columns[1].Width=(int) Math.Floor (dgSets.Width * .55);
 			dgSets.Columns[2].Width=(int) Math.Floor (dgSets.Width * .2);
+			dgSets.Columns[3].Width=(int) Math.Floor (dgSets.Width * .2);
+			dgSets.Columns[4].Width=(int) Math.Floor (dgSets.Width * .2);
+			dgSets.Columns[5].Width=(int) Math.Floor (dgSets.Width * .2);
+			
 			
 		}
 		void ResizeItemsGrid() {
 			dgItems.Columns[0].Width= (int) Math.Floor (dgItems.Width * .2);
-			dgItems.Columns[1].Width=(int) Math.Floor (dgItems.Width * .7);
+			dgItems.Columns[1].Width=(int) Math.Floor (dgItems.Width * .8);
 		}
 		
 		void ResizeInventoryGrid() {
 			dgInventory.Columns[0].Width= (int) Math.Floor (dgInventory.Width * .2);
 			dgInventory.Columns[1].Width=(int) Math.Floor (dgInventory.Width * .55);
 			dgInventory.Columns[2].Width= (int) Math.Floor (dgInventory.Width * .2);
+			dgInventory.Columns[3].Width= (int) Math.Floor (dgInventory.Width * .2);
+			dgInventory.Columns[4].Width= (int) Math.Floor (dgInventory.Width * .2);
+			dgInventory.Columns[5].Width= (int) Math.Floor (dgInventory.Width * .2);
 		}
 		void GenerateFullInventoryButtonClick(object sender, EventArgs e)
 		{
@@ -182,6 +189,8 @@ namespace InventoryWiz
 				this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
 				InventoryDao.CreateDB();
 				RefreshAllGrids();
+				
+				dgItems.DataSource = null;
 				this.Cursor = System.Windows.Forms.Cursors.Default;
 			}
 		}

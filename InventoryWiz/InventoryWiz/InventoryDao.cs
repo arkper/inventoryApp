@@ -46,7 +46,7 @@ namespace InventoryWiz
 			
 			using (SqlCeCommand comm = InventoryDao.getConnection().CreateCommand())
 			{
-				comm.CommandText = "select ID, DESCRIPTION, ONHAND from FURNITURE_SET ORDER BY ID";
+				comm.CommandText = "select * from FURNITURE_SET ORDER BY ID";
 				dt.Load(comm.ExecuteReader());
 			    dataGrid.DataSource = dt;
 			}
@@ -74,7 +74,7 @@ namespace InventoryWiz
 			
 			using (SqlCeCommand comm = InventoryDao.getConnection().CreateCommand())
 			{
-				comm.CommandText = "select ID, DESCRIPTION, ONHAND from INVENTORY ORDER BY [ID]";
+				comm.CommandText = "select * from INVENTORY ORDER BY ID";
 				dt.Load(comm.ExecuteReader());
 			    dataGrid.DataSource = dt;
 			}
