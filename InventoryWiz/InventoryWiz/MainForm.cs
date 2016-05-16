@@ -14,7 +14,7 @@ using System.Data.SqlServerCe;
 using System.Data.SqlClient;
 using System.Data.OleDb;
 using System.Data;
-
+using System.Configuration;
 
 namespace InventoryWiz
 {
@@ -52,7 +52,9 @@ namespace InventoryWiz
 					ResizeItemsGrid();
 				}
 			}
-			catch (Exception e) {}
+			catch (Exception e) {
+				Console.Write(e.Message);
+			}
 			
 		}
 		
@@ -172,7 +174,7 @@ namespace InventoryWiz
 			InventoryDao.GenerateInventory(true);
 			
 			MessageBox.Show ("Finished! Please find your full inventory at " + Application.StartupPath + "\\" +
-			                 System.Configuration.ConfigurationSettings.AppSettings["outputFile"]);
+			                 ConfigurationManager.AppSettings["outputFile"]);
 			
 			RefreshAllGrids();
 			

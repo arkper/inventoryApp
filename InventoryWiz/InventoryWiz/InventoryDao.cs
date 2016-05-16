@@ -13,6 +13,7 @@ using System.Data.SqlServerCe;
 using System.Data.OleDb;
 using System.Data;
 using System.Windows.Forms;
+using System.Configuration;
 
 
 namespace InventoryWiz
@@ -22,7 +23,7 @@ namespace InventoryWiz
 	/// </summary>
 	public class InventoryDao
 	{
-		private static String connString = System.Configuration.ConfigurationSettings.AppSettings["dbConnectionString"];
+		private static String connString = ConfigurationManager.AppSettings["dbConnectionString"];
 		private static SqlCeConnection conn = null;
 		
 		public static SqlCeConnection getConnection(){
@@ -61,7 +62,7 @@ namespace InventoryWiz
 			using (SqlCeCommand comm = InventoryDao.getConnection().CreateCommand())
 			{
 				comm.CommandText = "select i.ID, i.DESCRIPTION from SET_ITEM si join INVENTORY i on i.id=si.item_id where si.set_id=@id";
-				comm.Parameters.Add("id", id);
+				comm.Parameters.AddWithValue("id", id);
 				dt.Load(comm.ExecuteReader());
 			    dataGrid.DataSource = dt;
 			}
@@ -99,7 +100,7 @@ namespace InventoryWiz
 				
 				comm.CommandText = "insert into furniture_set(id, description) values(@id, @desc)";
 				
-				comm.Parameters.Add("desc", description);
+				comm.Parameters.AddWithValue("desc", description);
 				
 				comm.ExecuteNonQuery();
 				
@@ -114,8 +115,8 @@ namespace InventoryWiz
 			{
 				comm.CommandText = "insert into set_item(set_id, item_id) values(@setId, @itemId)";
 				
-				comm.Parameters.Add("setId", setId);
-				comm.Parameters.Add("itemId", itemId);
+				comm.Parameters.AddWithValue("setId", setId);
+				comm.Parameters.AddWithValue("itemId", itemId);
 				
 				
 				try {
@@ -123,6 +124,7 @@ namespace InventoryWiz
 				}
 				catch (SqlCeException ex)
 				{
+					Console.WriteLine(ex.Message);
 					MessageBox.Show("Your selection is causing a duplicated record! Please choose another item.");
 				}
 			}
@@ -136,7 +138,7 @@ namespace InventoryWiz
 			{
 				comm.CommandText = "delete from SET_ITEM where SET_ID=@setId";
 				
-				comm.Parameters.Add("setId", setId);
+				comm.Parameters.AddWithValue("setId", setId);
 				
 				comm.ExecuteNonQuery();
 
@@ -153,8 +155,8 @@ namespace InventoryWiz
 			{
 				comm.CommandText = "delete from SET_ITEM where SET_ID=@setId and ITEM_ID=@itemId";
 				
-				comm.Parameters.Add("setId", setId);
-				comm.Parameters.Add("itemId", itemId);
+				comm.Parameters.AddWithValue("setId", setId);
+				comm.Parameters.AddWithValue("itemId", itemId);
 				
 				comm.ExecuteNonQuery();
 			}
@@ -201,15 +203,15 @@ namespace InventoryWiz
 				
 				// Now generate full inventory of items and sets
 				
-				string templateFile = System.Configuration.ConfigurationSettings.AppSettings["templateFile"];
-				string outputFile = System.Configuration.ConfigurationSettings.AppSettings["outputFile"];
+				string templateFile = ConfigurationManager.AppSettings["templateFile"];
+				string outputFile = ConfigurationManager.AppSettings["outputFile"];
 				
 				File.Copy (templateFile, outputFile, true);
 				
 				
 				OleDbConnection excelConnection = new OleDbConnection();
 			
-				excelConnection.ConnectionString=System.Configuration.ConfigurationSettings.AppSettings["outputConnectionString"];
+				excelConnection.ConnectionString = ConfigurationManager.AppSettings["outputConnectionString"];
 			
 				excelConnection.Open();
 			
@@ -217,7 +219,7 @@ namespace InventoryWiz
 				
 				
 				string tabName = dt.Rows[0]["TABLE_NAME"].ToString();
-			
+				
 			 
 				using (OleDbCommand excelCmd =	excelConnection.CreateCommand())
 				{
@@ -306,7 +308,7 @@ namespace InventoryWiz
 			
 			OleDbConnection excelConnection = new OleDbConnection();
 			
-			excelConnection.ConnectionString=System.Configuration.ConfigurationSettings.AppSettings["excelConnectionString"];
+			excelConnection.ConnectionString = ConfigurationManager.AppSettings["excelConnectionString"];
 			
 			excelConnection.Open();
 			
@@ -339,12 +341,12 @@ namespace InventoryWiz
 					
 						comm.Parameters.Clear();
 					
-						comm.Parameters.Add("id", id);
-						comm.Parameters.Add("desc", description);
-						comm.Parameters.Add("onhand", onHand);
-						comm.Parameters.Add("onorder", onOrder);
-						comm.Parameters.Add("salesbos", salesBos);
-						comm.Parameters.Add("available", available);
+						comm.Parameters.AddWithValue("id", id);
+						comm.Parameters.AddWithValue("desc", description);
+						comm.Parameters.AddWithValue("onhand", onHand);
+						comm.Parameters.AddWithValue("onorder", onOrder);
+						comm.Parameters.AddWithValue("salesbos", salesBos);
+						comm.Parameters.AddWithValue("available", available);
 						
 						comm.ExecuteNonQuery();
 					}
