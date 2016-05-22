@@ -33,6 +33,7 @@ namespace InventoryWiz
 			if (validate())
 			{
 				InventoryDao.saveNewSet(txtId.Text, txtDesc.Text);
+				FormClear();
 			}
 		}
 		void ExitButtonClick(object sender, EventArgs e)
@@ -57,6 +58,12 @@ namespace InventoryWiz
 				return false;
 			}
 			return true;
+		}
+		
+		private void FormClear()
+		{
+			this.txtId.Clear();
+			this.txtDesc.Clear();
 		}
 	}
 }

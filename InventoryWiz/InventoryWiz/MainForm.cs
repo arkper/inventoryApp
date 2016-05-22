@@ -35,7 +35,7 @@ namespace InventoryWiz
 		}
 		
 		
-		void RefreshAllGrids()
+		public void RefreshAllGrids()
 		{
 			try {
 				InventoryDao.PopulateSets(dgSets);
@@ -103,15 +103,7 @@ namespace InventoryWiz
 		}
 		void AddItemButtonClick(object sender, EventArgs e)
 		{
-			if (dgInventory.CurrentRow != null && dgSets.CurrentRow != null)
-			{
-				string itemId = dgInventory.CurrentRow.Cells[0].Value.ToString();
-				string setId = dgSets.CurrentRow.Cells[0].Value.ToString();
-				
-				InventoryDao.SaveNewSetItem(setId, itemId);
-				
-				InventoryDao.PopulateItemsForSet(dgItems, setId);
-			}
+			AddInventoryItem();
 		}
 		
 		void RemoveItemButtonClick(object sender, EventArgs e)
@@ -144,7 +136,7 @@ namespace InventoryWiz
 		}
 		
 		
-		void ResizeSetsGrid() {
+		public void ResizeSetsGrid() {
 			dgSets.Columns[0].Width= (int) Math.Floor (dgSets.Width * .2);
 			dgSets.Columns[1].Width=(int) Math.Floor (dgSets.Width * .55);
 			dgSets.Columns[2].Width=(int) Math.Floor (dgSets.Width * .2);
@@ -195,6 +187,40 @@ namespace InventoryWiz
 				dgItems.DataSource = null;
 				this.Cursor = System.Windows.Forms.Cursors.Default;
 			}
+		}
+		
+		void DgInventoryCellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+	
+		}
+		void DgInventoryCellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			AddInventoryItem();
+		}
+		void DgInventoryRowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			AddInventoryItem();
+		}
+		
+		void AddInventoryItem()
+		{
+			if (dgInventory.CurrentRow != null && dgSets.CurrentRow != null)
+			{
+				string itemId = dgInventory.CurrentRow.Cells[0].Value.ToString();
+				string setId = dgSets.CurrentRow.Cells[0].Value.ToString();
+				
+				InventoryDao.SaveNewSetItem(setId, itemId);
+				
+				InventoryDao.PopulateItemsForSet(dgItems, setId);
+				
+				int currentRow = dgInventory.CurrentRow.Index;
+				
+				if (currentRow < dgInventory.Rows.Count-1)
+				{
+					dgInventory.CurrentCell = dgInventory.Rows[currentRow+1].Cells[0];
+				}
+				
+			}			
 		}
 	
 	}

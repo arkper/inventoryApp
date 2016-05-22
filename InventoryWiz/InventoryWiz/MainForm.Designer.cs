@@ -222,6 +222,9 @@ namespace InventoryWiz
 			this.dgInventory.Size = new System.Drawing.Size(697, 635);
 			this.dgInventory.TabIndex = 13;
 			this.dgInventory.TabStop = false;
+			this.dgInventory.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgInventoryCellContentClick);
+			this.dgInventory.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgInventoryCellContentDoubleClick);
+			this.dgInventory.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgInventoryRowHeaderMouseDoubleClick);
 			// 
 			// deleteSetButton
 			// 
