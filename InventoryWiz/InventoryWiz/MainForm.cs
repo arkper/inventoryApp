@@ -108,16 +108,7 @@ namespace InventoryWiz
 		
 		void RemoveItemButtonClick(object sender, EventArgs e)
 		{
-			if (dgSets.CurrentRow != null && dgItems.CurrentRow != null)
-			{
-				string itemId = dgItems.CurrentRow.Cells[0].Value.ToString();
-				string setId = dgSets.CurrentRow.Cells[0].Value.ToString();
-				
-				InventoryDao.DeleteSetItem(setId, itemId);
-				
-				InventoryDao.PopulateItemsForSet(dgItems, setId);
-			}
-	
+			DeleteInventoryItem();
 		}
 		void DeleteSetButtonClick(object sender, EventArgs e)
 		{
@@ -221,6 +212,28 @@ namespace InventoryWiz
 				}
 				
 			}			
+		}
+		
+		void DeleteInventoryItem()
+		{
+			if (dgSets.CurrentRow != null && dgItems.CurrentRow != null)
+			{
+				string itemId = dgItems.CurrentRow.Cells[0].Value.ToString();
+				string setId = dgSets.CurrentRow.Cells[0].Value.ToString();
+				
+				InventoryDao.DeleteSetItem(setId, itemId);
+				
+				InventoryDao.PopulateItemsForSet(dgItems, setId);
+			}
+			
+		}
+		void DgItemsCellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			DeleteInventoryItem();
+		}
+		void DgItemsRowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			DeleteInventoryItem();
 		}
 	
 	}

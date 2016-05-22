@@ -197,6 +197,8 @@ namespace InventoryWiz
 			this.dgItems.Size = new System.Drawing.Size(404, 217);
 			this.dgItems.TabIndex = 12;
 			this.dgItems.TabStop = false;
+			this.dgItems.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgItemsCellContentDoubleClick);
+			this.dgItems.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgItemsRowHeaderMouseDoubleClick);
 			// 
 			// dgInventory
 			// 

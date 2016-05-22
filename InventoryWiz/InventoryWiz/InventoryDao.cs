@@ -230,10 +230,21 @@ namespace InventoryWiz
 					{
 						string id = reader.GetString(0);
 						string desciption = reader.GetString(1);
-						int onHand = reader.GetInt32(2);
-						int onOrder = reader.GetInt32(3);
-						int salesBos = reader.GetInt32(4);
-						int available = reader.GetInt32(5);
+						int onHand = 0;
+						if (!reader.IsDBNull(2))
+							onHand = reader.GetInt32(2);
+						
+						int onOrder = 0;
+						if (!reader.IsDBNull(3))
+							onOrder = reader.GetInt32(3);
+						
+						int salesBos = 0;
+						if (!reader.IsDBNull(4))
+							salesBos = reader.GetInt32(4);
+						
+						int available = 0;
+						if (!reader.IsDBNull(5))
+							available = reader.GetInt32(5);
 					
 						excelCmd.CommandText = "insert into [" + tabName + 
 							"]([Item ID], [Desc for Sales], [Qty on Hand], [Qty on Order], [Sales BOs], [Qty Available]) " +
